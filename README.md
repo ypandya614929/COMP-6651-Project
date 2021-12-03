@@ -3,7 +3,7 @@ Comparative study of NNS algorithms &amp; data structures
 
 ## To setup virtualenv before running as .py file
     
-    virtualenv -p python3.6 env
+    virtualenv -p python3.8 env
     source env/bin/activate
     pip install -r requirements.txt
 
