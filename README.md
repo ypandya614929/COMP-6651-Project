@@ -20,3 +20,5 @@ Comparative study of NNS algorithms &amp; data structures
 	The nearest neighbour point co-ordinate : (154, 325)
 	Total number of points:  500
 	Total number of search iterations:  12
+	
+![Output Image](https://github.com/ypandya614929/COMP-6651-Project/blob/main/Screen%20Shot%202021-12-03%20at%205.39.13%20AM.png?raw=true)
