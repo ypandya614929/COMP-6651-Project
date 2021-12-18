@@ -1,3 +1,4 @@
+# import statements
 import datetime
 import rtree.index as Rtreelib
 from math import sqrt
@@ -5,19 +6,23 @@ from random import randint
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 
+# class defination for both RTree and KDTree generation
+# based on instance arguments
 class Node(object):
 
     # class variable
     count = 0
 
     # constructor
-    def __init__(self, points=[], length=0):
-        self.r_tree = None
-        self.setAxis(length, points)
-        points, median = self.findMedian(points)
-        self.setRoot(points, median)
-        self.setLeft(points, median, length)
-        self.setRight(points, median, length)
+    def __init__(self, points=[], length=0, rtree=False):
+        if not rtree:
+            self.setAxis(length, points)
+            points, median = self.findMedian(points)
+            self.setRoot(points, median)
+            self.setLeft(points, median, length)
+            self.setRight(points, median, length)
+        else:
+            self.r_tree = None
 
     # getter & setter methods
     def setRtree(self, tree):
@@ -174,7 +179,7 @@ if __name__ == '__main__':
     print("Total Search Time for KDTree : {0:.4f} ms".format((end_ts - start_ts).total_seconds()*1000))
 
     # R Tree Generation and NN finding
-    rtree = Node()
+    rtree = Node(rtree=True)
     rtree.generateRTree(points)
     start_ts = datetime.datetime.now()
     neighbour = rtree.nearest_neighbour_RTree(query_point) #  only searching time is taken into consideration
