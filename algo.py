@@ -145,6 +145,35 @@ class Node(object):
                 neighbour = neighbours[0]
         return neighbour
 
+    # generating random set of points
+    @classmethod
+    def generatePointset(cls, num):
+        points = []
+        for i in range(num):
+            point = (randint(0, num), randint(0, num))
+            points.append(point)
+        return points
+
+    # generating random query point
+    @classmethod
+    def generateQueryPoint(cls, num, points):
+        query_point = (randint(0, num), randint(0, num))
+        return query_point
+
+    # generating the graph for visualization if points are less than 1000
+    # otherwise it won't show graph only calculations can be seen.
+    @classmethod
+    def generateGraph(cls, points, neighbour, query_point):
+        if len(points) <= 1000:
+            points.remove(neighbour)
+            plt.scatter(*zip(*points), color="green")
+            plt.scatter(query_point[0], query_point[1], color="red")
+            plt.scatter(neighbour[0], neighbour[1], color="blue")
+            red_label = mpatches.Patch(color='red', label='Query Point')
+            blue_label = mpatches.Patch(color='blue', label='Neighbour Point')
+            plt.legend(handles=[red_label, blue_label])
+            plt.show()
+
 
 # python main method / start of program
 if __name__ == '__main__':
@@ -154,18 +183,19 @@ if __name__ == '__main__':
         try:
             n = int(input("Please enter total number of points: "))
             if type(n) == int:
-                break
+                if n != 1:
+                    break
+                print("===== Please select at least 2 numbers =====")
         except Exception:
             print("===== Please enter valid number =====")
 
     # set of points
     points = []
-    for i in range(n):
-        point = (randint(0, n), randint(0, n))
-        points.append(point)
+    points.extend(Node.generatePointset(n))
 
-    # randomly find the query point within total number of points
-    query_point = (randint(0, n), randint(0, n))
+    # query point assignment
+    query_point = Node.generateQueryPoint(n, points)
+
     print("Total number of points: ", n)
     print("The query point co-ordinate :", query_point)
 
@@ -182,19 +212,10 @@ if __name__ == '__main__':
     rtree = Node(rtree=True)
     rtree.generateRTree(points)
     start_ts = datetime.datetime.now()
-    neighbour = rtree.nearest_neighbour_RTree(query_point) #  only searching time is taken into consideration
+    r_neighbour = rtree.nearest_neighbour_RTree(query_point) #  only searching time is taken into consideration
     end_ts = datetime.datetime.now()
-    print("The nearest neighbour point co-ordinate RTree :", neighbour)
+    print("The nearest neighbour point co-ordinate RTree :", r_neighbour)
     print("Total Search Time for RTree : {0:.4f} ms".format((end_ts - start_ts).total_seconds()*1000))
 
-    # generating the graph for visualization if points are less than 1000
-    # otherwise it won't show graph only calculations can be seen.
-    if len(points) <= 1000:
-        points.remove(neighbour)
-        plt.scatter(*zip(*points), color="green")
-        plt.scatter(query_point[0], query_point[1], color="red")
-        plt.scatter(neighbour[0], neighbour[1], color="blue")
-        red_label = mpatches.Patch(color='red', label='Query Point')
-        blue_label = mpatches.Patch(color='blue', label='Neighbour Point')
-        plt.legend(handles=[red_label, blue_label])
-        plt.show()
+    # visualization
+    Node.generateGraph(points, neighbour, query_point)
